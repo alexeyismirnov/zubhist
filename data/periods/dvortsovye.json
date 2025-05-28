@@ -1,0 +1,84 @@
+{
+  "title": "Эпоха дворцовых переворотов (1725-1741)",
+  "timeWindow": {
+    "start": "1720-01-01",
+    "end": "1750-01-01"
+  },
+  "items": [
+    {
+      "id": 1,
+      "content": "Екатерина I",
+      "start": "1725-01-28",
+      "end": "1727-05-17",
+      "className": "ruler",
+      "type": "range"
+    },
+    {
+      "id": 2,
+      "content": "Петр II",
+      "start": "1727-05-18",
+      "end": "1730-01-30",
+      "className": "ruler",
+      "type": "range"
+    },
+    {
+      "id": 3,
+      "content": "Анна Иоанновна",
+      "start": "1730-02-04",
+      "end": "1740-10-28",
+      "className": "ruler",
+      "type": "range"
+    },
+    {
+      "id": 4,
+      "content": "Иоанн VI",
+      "start": "1740-10-28",
+      "end": "1741-12-06",
+      "className": "ruler",
+      "type": "range"
+    },
+    {
+      "id": 5,
+      "content": "Елизавета Петровна",
+      "start": "1741-12-06",
+      "end": "1762-01-05",
+      "className": "ruler",
+      "type": "range"
+    },
+    {
+      "id": 6,
+      "content": "Смерть Петра I",
+      "start": "1725-01-28",
+      "className": "death",
+      "type": "point"
+    },
+    {
+      "id": 7,
+      "content": "Падение Меншикова",
+      "start": "1727-09-21",
+      "className": "event",
+      "type": "point"
+    },
+    {
+      "id": 8,
+      "content": "\"Кондиции\"",
+      "start": "1730-01-19",
+      "className": "event",
+      "type": "point"
+    },
+    {
+      "id": 9,
+      "content": "Казнь Волынского",
+      "start": "1740-06-27",
+      "className": "event",
+      "type": "point"
+    },
+    {
+      "id": 10,
+      "content": "Переворот Елизаветы",
+      "start": "1741-11-25",
+      "className": "event",
+      "type": "point"
+    }
+  ]
+}

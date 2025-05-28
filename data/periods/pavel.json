@@ -1,0 +1,131 @@
+{
+  "title": "Жизнь и правление Павла I (1754-1801)",
+  "timeWindow": {
+    "start": "1750-01-01",
+    "end": "1810-01-01"
+  },
+  "items": [
+    {
+      "id": 1,
+      "content": "Детство и юность",
+      "start": "1754-09-20",
+      "end": "1773-09-29",
+      "className": "ruler",
+      "type": "range"
+    },
+    {
+      "id": 2,
+      "content": "Наследник престола",
+      "start": "1773-09-29",
+      "end": "1796-11-06",
+      "className": "ruler",
+      "type": "range"
+    },
+    {
+      "id": 3,
+      "content": "Император Павел I",
+      "start": "1796-11-06",
+      "end": "1801-03-23",
+      "className": "ruler",
+      "type": "range"
+    },
+    {
+      "id": 4,
+      "content": "Рождение Павла",
+      "start": "1754-09-20",
+      "className": "birth",
+      "type": "point"
+    },
+    {
+      "id": 5,
+      "content": "Панин - воспитатель",
+      "start": "1760-06-01",
+      "className": "event",
+      "type": "point"
+    },
+    {
+      "id": 6,
+      "content": "Переворот Екатерины II",
+      "start": "1762-06-28",
+      "className": "event",
+      "type": "point"
+    },
+    {
+      "id": 7,
+      "content": "Убийство Петра III",
+      "start": "1762-07-17",
+      "className": "death",
+      "type": "point"
+    },
+    {
+      "id": 8,
+      "content": "Первый брак",
+      "start": "1773-09-29",
+      "className": "event",
+      "type": "point"
+    },
+    {
+      "id": 9,
+      "content": "Смерть первой жены",
+      "start": "1776-04-15",
+      "className": "death",
+      "type": "point"
+    },
+    {
+      "id": 10,
+      "content": "Второй брак",
+      "start": "1776-09-26",
+      "className": "event",
+      "type": "point"
+    },
+    {
+      "id": 11,
+      "content": "Смерть Екатерины II",
+      "start": "1796-11-06",
+      "className": "death",
+      "type": "point"
+    },
+    {
+      "id": 12,
+      "content": "Коронация",
+      "start": "1797-04-04",
+      "className": "event",
+      "type": "point"
+    },
+    {
+      "id": 13,
+      "content": "Закон о престолонаследии",
+      "start": "1797-04-04",
+      "className": "reform",
+      "type": "point"
+    },
+    {
+      "id": 14,
+      "content": "Закон о барщине",
+      "start": "1797-04-04",
+      "className": "reform",
+      "type": "point"
+    },
+    {
+      "id": 15,
+      "content": "Швейцарский поход",
+      "start": "1799-09-01",
+      "className": "event",
+      "type": "point"
+    },
+    {
+      "id": 16,
+      "content": "Разрыв с Англией",
+      "start": "1800-12-01",
+      "className": "event",
+      "type": "point"
+    },
+    {
+      "id": 17,
+      "content": "Убийство Павла I",
+      "start": "1801-03-23",
+      "className": "death",
+      "type": "point"
+    }
+  ]
+}

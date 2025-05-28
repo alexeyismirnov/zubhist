@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Россия XVIII века: От дворцовых переворотов до Павла I</title>
+
+    <!-- Vis Timeline CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/vis-timeline/7.5.1/vis-timeline-graph2d.min.css" rel="stylesheet" type="text/css" />
+    
+    <!-- Font Awesome for icons -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet" type="text/css" />
+    
+    <!-- Main stylesheet -->
+    <link href="css/styles.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+    <div class="container">
+        <h1>Россия XVIII века: От дворцовых переворотов до Павла I</h1>
+
+        <div class="period-selector">
+            <button class="period-btn active" onclick="loadTimeline('dvortsovye')">Эпоха дворцовых переворотов (1725-1741)</button>
+            <button class="period-btn" onclick="loadTimeline('pavel')">Правление Павла I (1754-1801)</button>
+        </div>
+
+        <div class="timeline-container">
+            <h2 id="timeline-title">Интерактивная хронология</h2>
+
+            <div class="timeline-controls">
+                <button class="control-btn" onclick="timelineFit()" title="Показать всё">
+                    <i class="fas fa-expand-arrows-alt"></i>
+                </button>
+                <button class="control-btn" onclick="timelineZoomIn()" title="Приблизить">
+                    <i class="fas fa-search-plus"></i>
+                </button>
+                <button class="control-btn" onclick="timelineZoomOut()" title="Отдалить">
+                    <i class="fas fa-search-minus"></i>
+                </button>
+                <button class="control-btn" onclick="timelineToday()" title="К началу периода">
+                    <i class="fas fa-calendar-day"></i>
+                </button>
+            </div>
+
+            <div id="timeline"></div>
+
+            <div class="timeline-legend">
+                <div class="legend-item">
+                    <div class="legend-color" style="background: #3498db;"></div>
+                    <span>Правители</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background: #e74c3c;"></div>
+                    <span>Важные события</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background: #27ae60;"></div>
+                    <span>Реформы</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background: #9b59b6;"></div>
+                    <span>Рождения</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background: #34495e;"></div>
+                    <span>Смерти</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="timeline-tooltip" id="timeline-tooltip"></div>
+
+        <div class="tabs">
+            <button class="tab active" onclick="showSection('overview')">Обзор</button>
+            <button class="tab" onclick="showSection('people')">Действующие лица</button>
+            <button class="tab" onclick="showSection('events')">Ключевые события</button>
+            <button class="tab" onclick="showSection('reforms')">Реформы и политика</button>
+            <button class="tab" onclick="showSection('family')">Династические связи</button>
+        </div>
+
+        <!-- ОБЗОР -->
+        <div id="overview" class="content-section active">
+            <h2>Общая характеристика периода</h2>
+            <div id="overview-content" class="loading">Загрузка данных...</div>
+        </div>
+
+        <!-- ДЕЙСТВУЮЩИЕ ЛИЦА -->
+        <div id="people" class="content-section">
+            <h2>Ключевые действующие лица</h2>
+            <div id="people-content" class="loading">Загрузка данных...</div>
+        </div>
+
+        <!-- СОБЫТИЯ -->
+        <div id="events" class="content-section">
+            <h2>Ключевые события</h2>
+            <div id="events-content" class="loading">Загрузка данных...</div>
+        </div>
+
+        <!-- РЕФОРМЫ -->
+        <div id="reforms" class="content-section">
+            <h2>Реформы и политика</h2>
+            <div id="reforms-content" class="loading">Загрузка данных...</div>
+        </div>
+
+        <!-- ДИНАСТИЧЕСКИЕ СВЯЗИ -->
+        <div id="family" class="content-section">
+            <h2>Династические связи дома Романовых</h2>
+
+            <div class="family-tree">
+                <div class="generation">
+                    <div class="family-member">
+                        <strong>Алексей Михайлович</strong><br>
+                        (1629-1676)
+                    </div>
+                </div>
+
+                <div class="generation">
+                    <div class="family-member">
+                        <strong>Иван V</strong><br>
+                        (1666-1696)
+                        <div class="connection-line"></div>
+                    </div>
+                    <div class="family-member">
+                        <strong>Софья</strong><br>
+                        Регентша
+                    </div>
+                    <div class="family-member ruler">
+                        <strong>Петр I</strong><br>
+                        (1672-1725)
+                        <div class="connection-line"></div>
+                    </div>
+                </div>
+
+                <div class="generation">
+                    <div class="family-member ruler">
+                        <strong>Анна Иоанновна</strong><br>
+                        (1693-1740)
+                    </div>
+                    <div class="family-member">
+                        <strong>Алексей Петрович</strong><br>
+                        (1690-1718)
+                        <div class="connection-line"></div>
+                    </div>
+                    <div class="family-member ruler">
+                        <strong>Елизавета Петровна</strong><br>
+                        (1709-1762)
+                    </div>
+                    <div class="family-member">
+                        <strong>Анна Петровна</strong><br>
+                        (1708-1728)
+                        <div class="connection-line"></div>
+                    </div>
+                </div>
+
+                <div class="generation">
+                    <div class="family-member ruler">
+                        <strong>Петр II</strong><br>
+                        (1715-1730)
+                    </div>
+                    <div class="family-member ruler">
+                        <strong>Петр III</strong><br>
+                        (1728-1762)
+                        <div class="connection-line"></div>
+                    </div>
+                </div>
+
+                <div class="generation">
+                    <div class="family-member ruler">
+                        <strong>Павел I</strong><br>
+                        (1754-1801)
+                        <div class="connection-line"></div>
+                    </div>
+                </div>
+
+                <div class="generation">
+                    <div class="family-member ruler">
+                        <strong>Александр I</strong><br>
+                        (1777-1825)
+                    </div>
+                    <div class="family-member">
+                        <strong>Константин</strong><br>
+                        (1779-1831)
+                    </div>
+                    <div class="family-member">
+                        <strong>4 дочери</strong><br>
+                        Павла I
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Vis Timeline JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vis-timeline/7.5.1/vis-timeline-graph2d.min.js"></script>
+    
+    <!-- Application Scripts -->
+    <script src="js/dataLoader.js"></script>
+    <script src="js/main.js"></script>
+</body>
+</html>
