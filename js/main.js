@@ -53,6 +53,15 @@ document.addEventListener('DOMContentLoaded', async function() {
             tooltip: {
                 followMouse: true,
                 overflowMethod: 'flip'
+            },
+            template: function(item, element, data) {
+              let html = '';
+              if (item.content) {
+                // Simpler div, focusing on padding and word wrapping.
+                // Text alignment can be handled by .vis-item or this div.
+                html = `<div style="padding: 4px 6px; overflow-wrap: break-word; text-align: center;">${item.content}</div>`;
+              }
+              return html;
             }
         };
 

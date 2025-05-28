@@ -37,9 +37,42 @@ h1 {
 /* Styles for vis-timeline */
 .vis-item {
     border-radius: 5px;
-    border: none;
+    border: none !important;
     font-weight: bold;
     cursor: pointer;
+}
+
+/* Box-type items (point events) */
+.vis-item.vis-box {
+    min-width: 120px !important;
+    max-width: 180px !important;
+}
+
+/* Range-type items should expand to their full date range */
+.vis-item.vis-range {
+    min-width: 120px !important; /* Minimum width to ensure text fits */
+}
+
+/* Remove unwanted margin-left from timeline items */
+.vis-item-content, 
+div.vis-item-content {
+    margin-left: 0 !important;
+    padding: 4px 6px !important;
+    text-align: center !important;
+    font-size: 12px !important;
+    white-space: normal !important; /* Allow text to wrap */
+    overflow: visible !important; /* Make sure text isn't cut off */
+    width: auto !important; /* Let content determine width */
+}
+
+/* Hide the default connector line for box-type items */
+.vis-item.vis-box > .vis-line {
+    display: none !important;
+}
+
+/* Ensure proper spacing between timeline items */
+.vis-timeline {
+    border: none !important;
 }
 
 .vis-item.ruler {
