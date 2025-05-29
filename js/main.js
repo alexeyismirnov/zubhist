@@ -4,18 +4,25 @@
  */
 document.addEventListener('DOMContentLoaded', async function() {
     let timeline;
-    let currentPeriod = 'dvortsovye';
+    let currentPeriod = 'dvortsovye'; // Default period
     let currentSection = 'overview';
     let detailsData = {};
+    const audioPlayer = document.getElementById('chapter-audio-player');
+
+    // Map period IDs to their respective audio files
+    const audioFileMap = {
+        'dvortsovye': 'audio/dvortsovy_perevorot.mp3',
+        'pavel': 'audio/pavel.mp3',
+        'alexander1_liberal': 'audio/alexander1.mp3'
+    };
 
     // Initialize the application
     try {
         await initializeApp();
-    } catch (error) {
+        } catch (error) {
         console.error('Failed to initialize application:', error);
         showErrorMessage('Не удалось загрузить данные. Пожалуйста, обновите страницу.');
-    }
-
+        }
     /**
      * Initialize the application
      */
@@ -28,6 +35,12 @@ document.addEventListener('DOMContentLoaded', async function() {
         
         // Load initial content
         await updateSectionContent('overview');
+
+        // Set initial audio source
+        if (audioPlayer && audioFileMap[currentPeriod]) {
+            audioPlayer.src = audioFileMap[currentPeriod];
+            // audioPlayer.load(); // Not strictly necessary here as src is set initially
+        }
     }
 
     /**
@@ -48,7 +61,7 @@ document.addEventListener('DOMContentLoaded', async function() {
             format: {
                 minorLabels: {
                     year: 'YYYY'
-                }
+        }
             },
             tooltip: {
                 followMouse: true,
@@ -57,57 +70,42 @@ document.addEventListener('DOMContentLoaded', async function() {
             template: function(item, element, data) {
               let html = '';
               if (item.content) {
-                // Simpler div, focusing on padding and word wrapping.
-                // Text alignment can be handled by .vis-item or this div.
                 html = `<div style="padding: 4px 6px; overflow-wrap: break-word; text-align: center;">${item.content}</div>`;
               }
               return html;
             }
         };
 
-        // Load timeline data for the current period
         const timelineData = await DataLoader.loadTimelineData(currentPeriod);
-        
-        // Update timeline title
         document.getElementById('timeline-title').textContent = timelineData.title;
-        
-        // Create timeline
         timeline = new vis.Timeline(container, timelineData.items, options);
         
-        // Set initial window
         if (timelineData.timeWindow) {
             timeline.setWindow(timelineData.timeWindow.start, timelineData.timeWindow.end);
         }
-
-        // Event handlers for timeline
         setupTimelineEventHandlers();
     }
-
     /**
      * Set up event handlers for timeline interactions
      */
     function setupTimelineEventHandlers() {
-        // Click handler
         timeline.on('select', function (properties) {
             if (properties.items.length > 0) {
                 const itemId = properties.items[0];
                 const item = timeline.itemsData.get(itemId);
                 showTooltip(item.content);
-
-                // Auto-hide tooltip after 5 seconds
                 setTimeout(() => {
                     document.getElementById('timeline-tooltip').style.display = 'none';
                 }, 5000);
             }
-        });
+});
 
-        // Hover handlers
         timeline.on('itemover', function (properties) {
             const item = timeline.itemsData.get(properties.item);
             showTooltip(item.content);
         });
 
-        timeline.on('itemout', function (properties) {
+        timeline.on('itemout', function () {
             document.getElementById('timeline-tooltip').style.display = 'none';
         });
     }
@@ -124,21 +122,21 @@ document.addEventListener('DOMContentLoaded', async function() {
             let html = `<h3>${details.title}</h3>`;
             html += `<p><strong>Период:</strong> ${details.period}</p>`;
             html += `<p>${details.description}</p>`;
-
             if (details.facts && details.facts.length > 0) {
                 html += '<p><strong>Интересные факты:</strong></p><ul>';
-                details.facts.forEach(fact => {
-                    html += `<li>${fact}</li>`;
-                });
+                details.facts.forEach(fact => { html += `<li>${fact}</li>`; });
                 html += '</ul>';
             }
-
             tooltip.innerHTML = html;
             tooltip.style.display = 'block';
-
             const event = window.event;
-            tooltip.style.left = event.pageX + 10 + 'px';
-            tooltip.style.top = event.pageY - tooltip.offsetHeight - 10 + 'px';
+            if (event) { // Ensure event is available
+                tooltip.style.left = event.pageX + 10 + 'px';
+                tooltip.style.top = event.pageY - tooltip.offsetHeight - 10 + 'px';
+            } else { // Fallback position if event is not available
+                tooltip.style.left = '10px';
+                tooltip.style.top = '10px';
+            }
         }
     }
 
@@ -149,27 +147,39 @@ document.addEventListener('DOMContentLoaded', async function() {
     window.loadTimeline = async function(period) {
         currentPeriod = period;
 
-        // Update active button
         document.querySelectorAll('.period-btn').forEach(btn => btn.classList.remove('active'));
-        event.target.classList.add('active');
+        if (event && event.target) {
+            event.target.classList.add('active');
+        } else {
+            const buttons = document.querySelectorAll('.period-btn');
+            buttons.forEach(btn => {
+                if (btn.getAttribute('onclick') && btn.getAttribute('onclick').includes(`loadTimeline('${period}')`)) {
+                    btn.classList.add('active');
+                }
+            });
+        }
 
         try {
-            // Load new timeline data
             const timelineData = await DataLoader.loadTimelineData(period);
-            
-            // Update timeline title
             document.getElementById('timeline-title').textContent = timelineData.title;
-            
-            // Update timeline items
             timeline.setItems(timelineData.items);
-            
-            // Set window
             if (timelineData.timeWindow) {
                 timeline.setWindow(timelineData.timeWindow.start, timelineData.timeWindow.end);
             }
-            
-            // Update content in current active section
             await updateSectionContent(currentSection);
+
+            // Update audio player source using the map
+            if (audioPlayer && audioFileMap[period]) {
+                audioPlayer.src = audioFileMap[period];
+                audioPlayer.load(); // Load the new audio source
+                // Optional: auto-play the new audio
+                // audioPlayer.play(); 
+            } else if (audioPlayer) {
+                console.warn(`Audio file not mapped for period: ${period}`);
+                audioPlayer.removeAttribute('src'); // Or set to a default/silent audio
+                audioPlayer.load();
+            }
+
         } catch (error) {
             console.error(`Error loading timeline for period ${period}:`, error);
             showErrorMessage('Не удалось загрузить данные временной шкалы.');
@@ -179,23 +189,14 @@ document.addEventListener('DOMContentLoaded', async function() {
     /**
      * Timeline control functions
      */
-    window.timelineFit = function() {
-        timeline.fit();
-    };
-
-    window.timelineZoomIn = function() {
-        timeline.zoomIn(0.5);
-    };
-
-    window.timelineZoomOut = function() {
-        timeline.zoomOut(0.5);
-    };
-
+    window.timelineFit = function() { if(timeline) timeline.fit(); };
+    window.timelineZoomIn = function() { if(timeline) timeline.zoomIn(0.5); };
+    window.timelineZoomOut = function() { if(timeline) timeline.zoomOut(0.5); };
     window.timelineToday = async function() {
         try {
             const timelineData = await DataLoader.loadTimelineData(currentPeriod);
             if (timelineData.timeWindow && timelineData.timeWindow.start) {
-                timeline.moveTo(timelineData.timeWindow.start);
+                if(timeline) timeline.moveTo(timelineData.timeWindow.start);
             }
         } catch (error) {
             console.error('Error moving timeline to start date:', error);
@@ -208,22 +209,12 @@ document.addEventListener('DOMContentLoaded', async function() {
      */
     window.showSection = async function(sectionId) {
         currentSection = sectionId;
-
-        // Hide all sections
-        const sections = document.querySelectorAll('.content-section');
-        sections.forEach(section => section.classList.remove('active'));
-
-        // Remove active class from all tabs
-        const tabs = document.querySelectorAll('.tab');
-        tabs.forEach(tab => tab.classList.remove('active'));
-
-        // Show selected section
+        document.querySelectorAll('.content-section').forEach(section => section.classList.remove('active'));
+        document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
         document.getElementById(sectionId).classList.add('active');
-
-        // Activate corresponding tab
-        event.target.classList.add('active');
-
-        // Update section content
+        if (event && event.target) {
+            event.target.classList.add('active');
+        }
         await updateSectionContent(sectionId);
     };
 
@@ -232,21 +223,11 @@ document.addEventListener('DOMContentLoaded', async function() {
      * @param {string} sectionId - Section identifier
      */
     async function updateSectionContent(sectionId) {
-        // Skip for family section which has static content
-        if (sectionId === 'family') {
-            return;
-        }
-
+        if (sectionId === 'family') return;
         const contentElement = document.getElementById(`${sectionId}-content`);
-        
         try {
-            // Show loading indicator
             contentElement.innerHTML = '<p>Загрузка данных...</p>';
-            
-            // Load content data
             const contentData = await DataLoader.loadContentData(sectionId, currentPeriod);
-            
-            // Update content
             contentElement.innerHTML = contentData.content;
         } catch (error) {
             console.error(`Error updating content for section ${sectionId}:`, error);
@@ -267,11 +248,12 @@ document.addEventListener('DOMContentLoaded', async function() {
         errorDiv.style.borderRadius = '5px';
         errorDiv.style.textAlign = 'center';
         errorDiv.innerHTML = `<strong>Ошибка:</strong> ${message}`;
-        
-        document.querySelector('.container').prepend(errorDiv);
+        const container = document.querySelector('.container');
+        if (container) {
+            container.prepend(errorDiv);
+        }
     }
 
-    // Handle window resize
     window.addEventListener('resize', function() {
         if (timeline) {
             timeline.redraw();
